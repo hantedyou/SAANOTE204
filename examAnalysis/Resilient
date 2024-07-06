@@ -1,0 +1,58 @@
+EXAM2
+1	Auto Scaling group (ASG) is not terminating an unhealthy Amazon EC2 instance.
+What might happen?
+Sol: 
+	The health check grace period(寬限期) for the instance has not expired : ASG啟動EC2後的一段等待時間
+	The instance maybe in Impaired status
+	The instance has failed the Elastic Load Balancing (ELB) health check status
+(1)	spot instance type can be terminated by the Auto Scaling group (ASG)
+(2)	A user might have updated the configuration of the ASG and increased the minimum number of instances : ASG will launch new
+
+2	Aurora Multi-AZ reads are causing high input/output (I/O) and adding latency to the write requests. How to solve?
+Sol: Set up a read replica and modify the application to use the appropriate endpoint
+(1)	Provision another Amazon Aurora database and link it to the primary database as a read replica: No such thing
+(2)	Configure the application to read from the Multi-AZ standby instance: No such thing
+(3)	Activate read-through caching on the Amazon Aurora database: Aurora沒有內建的cache，可以整合ElastiCache ，但要修改程式
+
+3	Use Case:
+	A company is located in an area prone to natural disasters.
+	not ready to fully migrate to the AWS Cloud
+	wants a failover environment on AWS
+	Web server.
+	Data available on AWS and on-premises must be uniform.
+	Solution should have the LEAST amount of downtime
+Sol: 
+	Route 53 failover record
+	Application servers: ASG (EC2) + ALB
+	Storage Gateway with stored volumes to back up data to Amazon S3
+Explain:
+	Stored volumes: entire dataset is on premise, scheduled backups to S3
+
+
+4	Monitor CPU utilization of EC2 instances and send notification by Email when breach a certain threshold. 
+Building a solution with the LEAST amount of development effort.
+Sol: Amazon CloudWatch + SNS
+(1)	AWS Step Functions / Lambda: cannot monitor CPU utilization of EC2 instances or send notification emails
+
+5	Steps do migrate from an AWS Organization A to an AWS Organization B?
+Sol: 
+	Remove the member account from the old organization
+	Send an invite to the member account from the new Organization
+	Accept the invite to the new organization from the member account
+		
+6	Use case:
+	on-premises data center using SQL Server has a heavy read load.
+	Everyday production database needs to generate full copy and populate to DEV DB which cause high latency
+	migrating database engines if required
+Sol:
+	Aurora MySQL with Multi-AZ Aurora Replicas (Aurora only compatible with MySQL and PostgreSQL)
+	Dev database: restoring from the automated backups of Amazon Aurora. 
+		Explain: Aurora DB backup won’t impact performance. 
+(1)	Aurora MySQL with Multi-AZ Aurora Replicas and restore the dev database via mysqldump: using mysqldump to restore Dev DB would result in a significant load on the primary DB
+(2)	RDS for MySQL with a Multi-AZ deployment and use the standby instance as the dev database: standby is just for handling failover in a Multi-AZ deployment cannot access the standby instance and use it as a dev database
+(3)	RDS for SQL server with a Multi-AZ deployment and read replicas. Use the read replica as the dev database: read replica does not allow any database write operations.
+
+7	Migrating ETL workloads to AWS Cloud from Hadoop cluster deployed in the on-premises data center. The AWS Cloud solution needs to be highly available with about 50 EC2 instances per AZ. 
+Which EC2 placement groups is recommended.
+Sol: Partition placement group
+8	
