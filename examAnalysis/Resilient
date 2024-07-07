@@ -53,6 +53,54 @@ Sol:
 (3)	RDS for SQL server with a Multi-AZ deployment and read replicas. Use the read replica as the dev database: read replica does not allow any database write operations.
 
 7	Migrating ETL workloads to AWS Cloud from Hadoop cluster deployed in the on-premises data center. The AWS Cloud solution needs to be highly available with about 50 EC2 instances per AZ. 
-Which EC2 placement groups is recommended.
-Sol: Partition placement group
-8	
+Which EC2 placement groups is recommended?
+Sol: Partition placement group, 將instance分成多個分區(Partition)，每個分區使用不同的硬體，並且分區之間物理隔離，以提高容錯能力和可用性。
+適用於需要高可用性(HA)和容錯能力的分散式和大數據應用
+
+(1)	Cluster Placement Group: 將instance放置在單一AZ中，以實現低延遲、高吞吐量的網絡連接，適用於需要高性能計算（HPC）和大數據應用程序。
+(2)	Spread Placement Group: 將每個實例放置在不同的底層硬體中，以最大限度地減少同時失效的風險。適用於需要高可用性和低風險的應用，如關鍵任務應用程序。單一AZ內最多放置7個實例
+
+8	Use Case: 
+	A video backup service hosted on a fleet of Amazon EC2 instances
+	EC2 instances are behind an ALB and the instances are using Amazon EBS Volumes for storage.
+	On the first day of the beta launch, every time authenticated user login can see different subset of the videos they uploaded.
+Sol:
+	Root cause: EBS volumes are attached locally to the EC2 instances, therefore the uploaded videos are tied to specific EC2 instances
+	Solution 1: Mount Amazon Elastic File System (Amazon EFS) on all Amazon EC2 instances
+	Solution 2: Use Amazon S3 standard for storing the videos
+	Both solutions need one time job to copy vides from EBS
+
+9	Use Case: a Supply Chain Management application
+	web-tier: EC2 instances
+	DB-tier: Amazon RDS MySQL
+	All end users of the web application would be located in the US
+	Beta version: all the resources are deployed in a single AZ
+	Target: A MOST resource-efficient solution to improve application availability
+Sol: 
+	Web-tier: EC2 instances in two AZs, behind an ELB
+	DB-tier: RDS MySQL database with multi-AZ configuration.
+(1)	EC2 instances in two regions behind ELB + RDS multi-AZ: ELB can’t work across regions
+(2)	EC2 instances in two AZs behind ELB + RDS read replica: Read replicas are meant to address scalability issues and can’t use for improving availability.
+
+10	An urgent solution to prevent the rapidly increasing workload from exceeding the available database storage for their newly launched mobile gaming application using Amazon RDS MySQL.
+
+Sol: Enable storage auto-scaling for Amazon RDS MySQ
+
+(1)	Migrate Amazon RDS MySQL database to Amazon DynamoDB which automatically allocates storage space when required: DynamoDB is a NoSQL database which implies significant development effort.
+(2)	Migrate RDS MySQL database to Amazon Aurora which offers storage auto-scaling: it involves significant systems administration effort
+(3)	Create read replica for Amazon RDS MySQL: read replicas cannot help to automatically scale storage for the primary database.
+
+11	A retail company needs to test a blue-green deployment for its global application within 48 hours, focusing on mobile users prone to DNS caching, just two days before their annual Thanksgiving sale.
+Give a solution to test the deployment on as many users as possible.
+
+Sol: Use AWS Global Accelerator to distribute a portion of traffic to a particular deployment. Global Accelerator uses endpoint weights to determine the proportion of traffic that is directed to endpoints in an endpoint group.
+
+What’s Blue/green deployment: 
+在 Green 環境中部署應用程序的新版本，進行測試和驗證，一旦 Green 環境被確認正常，將流量從 Blue 環境切換到 Green 環境。通常透過修改Load Balancer（如AWS的ELB）來完成。
+
+Why is DNS service not suit for this case?
+Some client devices and internet resolvers cache DNS answers for long periods.
+
+(1)	Route 53 weighted routing to spread traffic across different deployments: see “Why is DNS service not suit for this case?”
+(2)	Use ELB to distribute traffic across deployments: the use-case refers to a global application and ELB cannot be used for a multi-Region
+(3)	Use AWS CodeDeploy deployment options to choose the right deployment: CodeDeploy is not meant to distribute traffic across instances
