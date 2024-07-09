@@ -1,0 +1,43 @@
+File Gateway is for S3
+
+
+CNAME（Canonical Name）記錄用於將一個域名別名（alias）映射到另一個正規名稱（canonical name）。
+用途：將一個域名映射到另一個域名，適用於需要重用現有DNS記錄的情況。
+典型用法：www.example.com 可以是一個CNAME記錄，指向 example.com。
+限制：
+不能用於頂級域名。例如，不能將 example.com 設置為CNAME指向 some.otherdomain.com。
+每次查詢CNAME記錄時會進行重定向，這可能會增加查詢延遲。
+
+
+Alias記錄是AWS Route 53中的一個特性，用於將一個域名映射到AWS資源（如CloudFront分配、Elastic Load Balancer、S3網站托管等）
+用途：將一個域名直接映射到AWS資源，實現快速解析。
+典型用法：example.com 可以是一個Alias記錄，指向一個CloudFront分配或ELB。
+優勢：
+頂級域名支持：Alias記錄可以應用於頂級域名（例如 example.com），而CNAME記錄不能。
+零查詢費用：在Route 53中查詢Alias記錄是免費的，而查詢CNAME記錄會產生費用。
+自動更新：當指向的AWS資源的IP地址變更時，Alias記錄會自動更新。
+支持更多資源：Alias記錄可以指向更多種類的資源，如CloudFront分配、ELB、S3桶等。
+
+
+AWS VPN CloudHub 是AWS提供的一種解決方案，用於在不同的站點（如分支機構、辦公室或數據中心）之間構建安全且可擴展的多點VPN連接。它利用AWS Virtual Private Gateway來實現不同VPN連接之間的通信，從而形成一個中心輻射狀的拓撲結構。
+
+
+file storage offerings that provide full Windows compatibility
+O File Gateway Configuration of AWS Storage Gateway
+O Amazon FSx for Windows File Server
+X EFS does not support SMB protocol.
+
+
+
+security groups: you "cannot" use an Internet Gateway ID as the custom source for the inbound rule.
+O IP address
+O  security group 
+O  IP addresses in CIDR block notation 
+
+
+deploy the same template across AWS accounts
+O AWS CloudFormation StackSets 
+X AWS CloudFormation templates
+
+
+
