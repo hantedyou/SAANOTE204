@@ -41,3 +41,50 @@ X AWS CloudFormation templates
 
 
 
+EC2 instances in an Auto Scaling group handle Simple Queue Service (Amazon SQS) queue sudden spike
+O target tracking scaling policy based on a custom Amazon SQS queue metric
+X simple scaling policy: choose scaling metrics and threshold values for the Amazon CloudWatch alarms that trigger the scaling process
+X step scaling: 需要設置多個閾值和動作, 用在需要精確控制縮放的應用
+
+
+ cross-zone load balancing 如果沒開，ELB只會將流量平均分配到zone，不會管裡面有多少instance.
+ 
+ 
+租賃行為：
+如果啟動模板(Launch Template)設置為共享，而 VPC 租賃設置為專用，那麼實例將具有專用租賃。
+如果啟動模板設置為專用，而 VPC 租賃設置為默認，實例也會具有專用租賃。
+
+
+
+ EC2 instances
+ O Spot Fleets can maintain target capacity by launching replacement instances after Spot Instances in the fleet are terminated
+ O When you cancel an active spot request, it does "not" terminate the associated instance
+ O If a spot request is persistent, then it is opened again after your Spot Instance is interrupted
+ 
+ 
+ Amazon SQS: postpone the delivery of new messages to the queue for a few seconds
+ O Delay Queues :在消息被接收後延遲一段時間再讓它們對 consumer visible。這樣可以用來控制消息的處理時間。
+ X Visibility Timeout:確保消息在處理期間不會被其他consumer看到，從而防止消息被重複處理。
+ 
+ 
+ CNAME records can be used to map one domain name to another
+ 
+ 
+ 
+High Performance Computing (HPC) and machine learning applications workflows
+ O Elastic Fabric Adapter (EFA):a network device that can attach to EC2 instance enhances the performance of inter-instance communication
+ X Elastic Network Interface (ENI):  a logical networking component in a VPC that represents a virtual network card.
+ X Elastic Network Adapter (ENA) :support enhanced networking via single root I/O virtualization (SR-IOV) to provide high-performance networking capabilities. 
+ X Elastic IP Address (EIP) :a static IPv4 address associated with your AWS account (reachable from the internet)
+ 
+ 
+ use CloudWatch alarms to automatically recover EC2 instances if they become impaired. 
+ O A recovered instance is identical(完全相同的) to the original instance, including the instance ID, private IP addresses, Elastic IP addresses, and all instance metadata
+ O If your instance has a public IPv4 address, it retains the public IPv4 address after recovery
+ X Terminated Amazon EC2 instances can be recovered if they are configured at the launch of instance:  terminated instances cannot be recovered.
+ 
+ 
+ 
+ 
+
+
