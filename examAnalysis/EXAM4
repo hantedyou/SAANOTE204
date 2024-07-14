@@ -1,0 +1,49 @@
+DynamoDB table 特定時段使用，流量不可預測
+ O on-demand capacity mode
+ X provisioned capacity mode with auto-scaling enabled
+ 
+ 
+ Surge traffic for highly dynamic website 
+ O ASG
+ X CloudFront: for static content
+ X Route 53 Multi Value record: Multi Value answer routing policy when you want Route 53 to respond to DNS queries with up to eight healthy records selected at random. Not help in this situation.
+ 
+ 
+ 
+EBS Volume Types
+  gp2 / gp3 (SSD): General purpose SSD volume that balances price and performance for a wide variety of workloads
+  io1 / io2 Block Express (SSD): Highest-performance SSD volume for mission-critical low-latency or high-throughput workloads; Multi-attach
+  st1 (HDD): Low cost HDD volume designed for frequently accessed, throughput-intensive workloads
+  sc1 (HDD):  Lowest cost HDD volume designed for less frequently accessed workloads
+  
+  
+*** Key points of consideration when using AWS Lambda as a backbone for serverless architecture
+ O If you intend to reuse code in more than one AWS Lambda function, you should consider creating an AWS Lambda Layer for the reusable code
+ O By default, AWS Lambda functions always operate from an AWS-owned VPC and hence have access to any public internet address or public AWS APIs. Once an AWS Lambda function is VPC-enabled, it will need a route through a Network Address Translation gateway (NAT gateway) in a public subnet to access public resources
+ O Since AWS Lambda functions can scale extremely quickly, it's a good idea to deploy a Amazon CloudWatch Alarm that notifies your team when function metrics such as ConcurrentExecutions or Invocations exceeds the expected threshold
+ 
+ X Serverless architecture and containers complement each other but you cannot package and deploy AWS Lambda functions as container images
+ X The bigger your deployment package, the slower your AWS Lambda function will cold-start. Hence, AWS suggests packaging dependencies as a separate package from the actual AWS Lambda package
+ 
+ 
+Each VPN connection of AWS Site-to-Site VPN has two VPN tunnels. By creating an AWS Transit Gateway with equal cost multipath routing (ECMP) and adding additional VPN tunnels, you can scale beyond the default maximum limit of 1.25 Gbps.
+
+
+Disaster Recovery
+ Pilot Light:  A small version of the app is always running in the cloud(只有核心部分一直運行)
+ Warm Standby: Full system is up and running, but at minimum size
+ 
+ 
+ 
+*** A load balancer linked to different target groups with different URLs which have owned SSL certificate
+SNI(Server Name Indication) solves the problem of loading multiple SSL certificates onto one web server
+You can host multiple TLS secured applications, each with its own TLS certificate, behind a single load balancer. 
+To use SNI, all you need to do is bind multiple certificates to the same secure listener on your load balancer
+
+
+Data stored on Amazon S3 that it cannot be deleted until the regulatory time period has expired.
+ O Amazon S3 Object Lock: store objects using a write once, read many (WORM) model. 
+ X Amazon S3 Glacier Vault Lock: Vault Lock is only for Glacier and not for Amazon S3
+ 
+ Next Q48
+ 
