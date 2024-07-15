@@ -1,0 +1,54 @@
+By default, all Amazon DynamoDB tables are encrypted using "AWS owned keys", which do not write to AWS CloudTrail logs
+All DynamoDB tables are encrypted. There is no option to enable or disable encryption for new or existing tables.
+
+
+Use "database cloning" to create multiple clones of the production database and use each clone as a "test database"
+ > You cannot clone databases across AWS regions.
+ > Currently, you are limited to 15 clones based on a copy
+ Note: binlog replication and mysqldump utility requires several manual steps
+ 
+
+Aurora Replicas also help to increase availability
+
+
+ALB removes an instance from its pool of healthy instances whenever it is detected as unhealthy but the ASG fails to kick-in and provision the replacement instance.
+  > The ASG is using Amazon EC2 based health check and the ALB is using ALB based health check
+  
+  
+  
+S3: A process replaces an existing object and immediately tries to read it. Amazon S3 always returns the latest version of the object
+Amazon S3 delivers strong read-after-write consistency(先寫後讀一致性) automatically, without changes to performance or availability,
+
+
+
+AWS WAF can be deployed on 
+ O Amazon CloudFront
+ O ALB
+ O API Gateway
+ X EC2 instance
+ 
+
+Data transfer pricing over AWS Direct Connect is lower than data transfer pricing over the internet
+
+
+
+same load balancer, linked to different target groups with different URLs, that are similar to these - checkout.mycorp.com, www.mycorp.com, mycorp.com/profile, and mycorp.com/search.
+ O ALB:Path-based Routing
+ 
+ next: Q15
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
