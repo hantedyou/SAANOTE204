@@ -39,7 +39,130 @@ same load balancer, linked to different target groups with different URLs, that 
 
 
 
+*****************************************************
 
+
+start from Q41
+
+ALB + EC2 + CloudFront , got many SQL injection and cross-site scripting attack
+ O Use AWS Web Application Firewall (AWS WAF) with Amazon CloudFront distribution
+ X Use AWS Security Hub with Amazon CloudFront distribution :You cannot use Security Hub to prevent SQL injection and cross-site scripting attacks.
+ 
+ 
+ALB + EC2 + AWS WAF:
+block access to application from specific countries; allow  remote development team (from one of the blocked countries) to have access to the application. 
+ O Block: AWS WAF geo match
+ O Allow: AWS WAF IP set
+ X ALB: cannot block or allow traffic based on geographic match conditions or IP based conditions. 
+ X network access control list (network ACL) does not have the capability to block traffic based on geographic match conditions.
+ 
+ 
+By default, cross-zone load balancing  
+ > ALB enabled
+ > NLB disabled
+ 
+ 
+Amazon EC2 instance public IP
+ http://"169.254".169.254/latest/"meta-data"/public-ipv4
+ 
+ 
+ 
+ALB + EC2 - CRM application;
+users reporting frequent sign-in requests from the application; 
+root cause: unhealthy servers causing session data to be lost.
+ O Elasticache for distributed in-memory cache based session management
+ X sticky sessions enable each user to interact with one server and one server only; unhealthy instance session is gone
+ 
+
+Amazon RDS database what happens when the primary instance of the Multi-AZ configuration goes down.
+ O CNAME record will be updated to point to the standby database
+ 
+ 
+Data protection mechanisms on AWS S3
+ O S3 can encrypt data in transit using HTTPS (TLS)
+ O S3 can protect data at rest using Client-Side Encryption
+ O S3 can protect data at rest using Server-Side Encryption
+ X S3 can encrypt object "metadata" by using Server-Side Encryption: Metadata, which can be included with the object, is not encrypted while being stored on Amazon S3
+ 
+ 
+Amazon Simple Queue Service (Amazon SQS) : message processing failures for some customer orders.
+ O Use a dead-letter queue to handle message processing failures
+ X Use short/long polling to handle message processing failures
+ X temporary queues: The most common use case for temporary queues is the request-response messaging pattern (EX: processing a login request).
+ 
+
+
+In case of an Instance Health Check failure, an "EC2 Reboot CloudWatch Alarm Action" can be used to reboot the instance.
+
+
+Amazon EBS volumes are Availability Zone (AZ) locked:
+ You can attach an Amazon EBS volume to an Amazon EC2 instance "in the same AZ".
+ 
+ 
+S3 event notification destination
+ O Standard SQS
+ X FIFO SQS
+ 
+ 
+Solve Kinesis Data Streams getting a "ProvisionedThroughputExceededException" exception.
+ O Use batch messages
+ X Increase the number of shards :Increasing shards could be a short term fix but will substantially increase the cost
+ 
+ 
+ASB EC2
+It is not possible to "modify a launch configuration once it is created. 
+
+
+
+Amazon Kinesis Data Streams (KDS); Multiple consumer applications; performance lag for the "data delivery speed" between producers and consumers.
+ O Use Enhanced Fanout feature of Amazon KDS: You should use enhanced fan-out if you have multiple consumers retrieving data from a stream in parallel
+ X KDS + Kinesis Data Firehose: KDF can only write to Amazon S3, Amazon Redshift, Amazon Elasticsearch or Splunk.
+ 
+ 
+Spread placement group of Amazon EC2 instances:
+ 每個AZ最多7個instances
+ 
+ 
+ 
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
 
 
