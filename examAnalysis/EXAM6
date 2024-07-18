@@ -1,0 +1,194 @@
+Q14
+
+IAM group is a collection of IAM users. You can use groups to specify permissions for a collection of users.
+
+
+Transferring a significant volume of data from on-site storage to AWS, where it will be accessed by Windows, Mac, and Linux-based Amazon EC2 instances
+using both SMB and NFS protocols
+  O Set up an Amazon FSx for ONTAP instance. Configure an FSx for ONTAP file system on the root volume and migrate the data to the FSx for ONTAP volume
+  X EFS: not supported on Windows instances.
+  X OpenZFS :  NOT support the SMB protocol.
+  
+
+Key characteristics of the Instance Store volumes
+ > You can't detach an instance store volume from one instance and attach it to a different instance
+ > If you create an Amazon Machine Image (AMI) from an instance, the data on its instance store volumes isn't preserved
+  
+
+
+Any "database engine level upgrade" for an Amazon "RDS" database instance with "Multi-AZ" deployment triggers both the primary and standby database instances to be upgraded "at the same time". This causes downtime until the upgrade is complete
+
+
+
+Temporary queues help you save development time and deployment costs when using common message patterns such as request-response. 
+
+
+"Big Data" consulting company runs "large distributed and replicated" workloads , want to move to EC2 on AWS. 
+which "EC2 placement groups" type minimize correlated "hardware failures"	?
+ O Partition placement groups
+ X Spread placement groups
+
+  
+S3 Analytics storage class analysis:
+ O Storage class analysis only provides recommendations for "Standard to Standard IA(Standard-Infrequent Access) classes"
+ 
+ 
+Setting up a custom domain for internal usage with the private hosted zones feature of Amazon Route 53.
+Which VPC settings need to enable?
+ O enableDnsHostnames
+ O enableDnsSupport
+ 
+ 
+Access control such that only the permitted "Amazon EC2" instances can read from the "Amazon EFS" file system:
+ O IAM policy: control access for clients "who can mount" file system with the required permissions
+ O VPC security groups: control the "network traffic" to and from file system
+ X network access control list (network ACL): operate at the subnet level and not at the instance level.
+ 
+ 
+ 
+application running on EC2 (in a  custom VPC) needs to access images stored on Amazon S3 and update DynamoDB.
+ O Create a "separate gateway endpoint" for Amazon S3 and Amazon DynamoDB each. Add two new "target entries" for these two gateway endpoints in the "route table" of the custom VPC
+ X interface endpoint : use the interface endpoints, you need to connect to the given services using the private IP address, instead of creating an entry as a target in the route table of the custom VPC
+
+
+
+AWS service can be used to protect the Amazon EC2 instances from unauthorized behavior in the future.
+ O Amazon GuardDuty:  continuously monitors for malicious or unauthorized behavior to help protect your AWS resources
+ X AWS WAF
+ X AWS Shield Advanceds:更全面的防護
+ 
+ 
+MOST cost-effective way of isolating the Amazon EC2 instances to a single tenant to run applications on single-tenant hardware to meet compliance guidelines.
+ X Dedicated Instance: 
+  - Dedicated Instances that belong to different AWS accounts are physically isolated at a hardware level
+  - Dedicated Instances may share hardware with other instances from the "same AWS account" that are not Dedicated Instances.
+ 
+ 
+Archive the on-premises data into a "POSIX compliant" file storage system on AWS Cloud. 
+Archived data would be accessed for just about a week in a year.
+ O EFS Infrequent Access: 
+ X S3 Standard-IA: object-based storage, not POSIX-compliant. 
+ 
+
+
+NLB: you can offload the decryption/encryption of Transport Layer Security (TLS) traffic from your application servers to the NLB.
+ASG and EC2 should be in private subnet.
+
+
+RDS Read Replica:  For replication to operate effectively, each read replica should have "the same amount of compute and storage resources" as the source database instance.
+  
+  
+ 
+ 
+use Amazon CloudFront to distribute  content only to service subscribers
+ O CloudFront signed cookies
+ O CloudFront signed URLs
+ X Require HTTPS for communication between Amazon CloudFront and your custom origin: cannot use HTTPS to restrict access to your private content
+ 
+ 
+ 
+SQS: AWS recommends using "separate queues" to provide prioritization of work. 
+
+
+S3: Scan first N bytes of all object
+ O Byte Range Fetch
+ - S3 Select: new Amazon S3 capability designed to pull out only the data you need from an object
+   X Byte Range Fetch parameter
+   O ScanRange parameter
+   
+  
+You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services cannot initiate a connection with those instances.
+  
+  
+Ensure that all objects uploaded to an Amazon S3 bucket are encrypted:
+ > Configure the bucket policy to deny if the "PutObject" does not have an "x-amz-server-side-encryption" header set
+  
+
+
+Amazon RDS Multi-AZ
+ O Amazon RDS applies "operating system updates" by performing maintenance on the standby, then promoting the standby to primary and finally performing maintenance on the old primary, which becomes the new standby  
+ Note: database engine level upgrade 是同時
+ O Amazon RDS "automatically" initiates a "failover" to the standby, in case primary database fails for any reason 
+ X To enhance read scalability, a Multi-AZ standby instance can be used to serve read requests
+  
+ 
+Add a "caching layer" of relational database. The caching layer to have "replication and archival" support built into the architecture.
+ O Amazon ElastiCache for "Redis":  in-memory data store , real-time transactional and analytical processing
+ X Amazon ElastiCache for Memcached: Memcached-compatible in-memory key-value store service, Session stores , not support replication and archival snapshots
+ 
+ 
+ 
+A relational database that runs several queries that perform joins on multiple tables. use a "caching service" that supports "multi-threading".
+ O Amazon ElastiCache for Memcached
+ X Amazon ElastiCache for Redis:Redis does not support multi-threading
+ 
+ 
+completely secure the communications between "CloudFront distribution and S3 bucket" which contains the static files
+ O Create an origin "access identity (OAI)" and update the S3 "Bucket Policy"
+ X Update the S3 bucket security groups to only allow traffic from the CloudFront security group: S3 buckets don't have security groups
+ X Create a bucket policy to only authorize the IAM role attached to the CloudFront distribution: You cannot attach IAM roles to the Amazon CloudFront distribution
+ 
+ 
+
+A critical monolith application can't work in distributed mode and must be deployed on a single web server. 
+Need a MOST cost-efficient solution to automatically recover from the failure of an Availability Zone (AZ). 
+ O Create an ASG that spans across 2 AZ, which min=1, max=1, desired=1
+ O Create an elastic IP address (EIP) and use the Amazon EC2 user-data script to attach it
+ O *** Assign an Amazon EC2 Instance Role to perform the necessary API calls
+ X Create a Spot Fleet request: not for critical application
+ X Create an ALB and a target group with the instance(s) of the ASG: have to pay for the provisioned ALB
+
+
+
+key characteristics of EC2 "Spot instances" and "Spot fleets":
+ O Spot instances are spare(空閒的) Amazon EC2 capacity that can save you up 90% off of On-Demand prices. Spot instances can be interrupted by Amazon EC2 for capacity requirements with a 2-minute notification
+ O A Spot fleet can consist of a set of Spot Instances and "optionally On-Demand Instances" that are launched to meet your target capacity
+ X Spot fleets allow you to request Amazon EC2 Spot instances for 1 to 6 hours at a time to avoid being interrupted
+
+
+
+S3 "Standard-IA" is for data that is accessed less frequently but requires "rapid access when needed".
+Amazon "Athena" is an interactive query service that makes it easy to "analyze data directly in Amazon S3" using standard SQL.
+
+
+Instances that use Amazon EBS for the root device automatically have an Amazon EBS volume attached
+You cannot mount Instance Store volumes to multiple Amazon EC2 instances.
+
+
+Which AWS resources can the AWS "Firewall Manager" configure rules on?
+ O VPC Security Groups
+ O AWS Web Application Firewall (AWS WAF)
+ O AWS Shield Advanced
+ X Amazon GuardDuty
+ 
+ 
+Big data analysis job leveraging Spark to create customized reports on a client-by-client basis.
+The big data analysis job needs to read the data from Amazon S3 and output it back to Amazon S3.
+ O AWS Glue
+ O Amazon EMR: EMR is used for launching Hadoop / Spark clusters
+ X Amazon Athena
+
+
+application on EC2 behind ALB has come under attack. 
+Attackers perform over 100 requests per second, while your normal users only make about 5 requests per second.
+ O AWS WAF setup a "rate-based" rule
+ X AWS Shield Advanced and setup a rate-based rule:
+  - AWS Shield is a managed DDoS protection service
+  - AWS Shield Advanced provides enhanced resource-specific detection , cannot set up rate-based rules in Shield.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
